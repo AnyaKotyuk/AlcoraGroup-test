@@ -9,6 +9,10 @@ class TestForm extends Model
 {
     public $name;
     public $email;
+    public $age;
+    public $height;
+    public $weight;
+    public $city;
 
     public function rules()
     {
