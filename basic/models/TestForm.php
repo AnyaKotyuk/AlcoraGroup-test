@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\FileHelper;
 
 class TestForm extends Model
 {
@@ -37,6 +38,7 @@ class TestForm extends Model
         $images = [];
         if ($this->validate()) {
             foreach ($this->images as $file) {
+                FileHelper::createDirectory('uploads');
                 $file->saveAs('uploads/' . $file->baseName . '.' . $file->extension);
                 $images[] = $file->baseName . '.' . $file->extension;
             }
