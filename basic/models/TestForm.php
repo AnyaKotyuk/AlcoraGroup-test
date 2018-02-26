@@ -39,8 +39,9 @@ class TestForm extends Model
         if ($this->validate()) {
             foreach ($this->images as $file) {
                 FileHelper::createDirectory('uploads');
-                $file->saveAs('uploads/' . $file->baseName . '.' . $file->extension);
-                $images[] = $file->baseName . '.' . $file->extension;
+                if($file->saveAs('uploads/' . $file->baseName . '.' . $file->extension)) {
+                    $images[] = $file->baseName . '.' . $file->extension;
+                }
             }
             return $images;
         } else {
