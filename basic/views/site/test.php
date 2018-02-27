@@ -4,7 +4,6 @@
  */
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-rmrevin\yii\fontawesome\AssetBundle::register($this);
 use kartik\file\FileInput;
 ?>
 
