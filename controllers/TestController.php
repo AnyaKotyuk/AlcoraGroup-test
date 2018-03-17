@@ -1,8 +1,6 @@
 <?php
-
 namespace app\controllers;
 
-use app\models\TestForm;
 use app\models\Test;
 use Yii;
 use yii\web\Controller;
@@ -18,23 +16,14 @@ class TestController extends Controller
 
     public function actionForm()
     {
-        $model = new TestForm();
-        $db = new Test;
+        $model = new Test();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->images = UploadedFile::getInstances($model, 'images');
-            $images = $model->upload();
+            $images = UploadedFile::getInstances($model, 'images');
+            $images = $model->upload($images);
 
             // save data to DB
-            $db->name = $model->name;
-            $db->email = $model->email;
-            $db->age = $model->age;
-            $db->height = $model->height;
-            $db->weight = $model->weight;
-            $db->city = $model->city;
-            $db->technique = $model->technique;
-            $db->english = $model->english;
-            $db->images = json_encode($images);
-            $db->save();
+            $model->images = json_encode($images);
+            $model->save();
 
             // send email
             $email_body = '<b>Name:</b> '.$model->name.'<br>';
@@ -48,13 +37,13 @@ class TestController extends Controller
 
             Yii::$app->mailer->compose('layouts/test', ['images' => $images] )
                 ->setFrom('test@gmail.com')
-                ->setTo($db->email)
+                ->setTo($model->email)
                 ->setSubject('Test form')
                 ->setHtmlBody($email_body)
                 ->send();
 
 
-            return $this->redirect(['success', 'id' =>$db->id ]);
+            return $this->redirect(['success', 'id' =>$model->id ]);
         } else {
             return $this->render('test', ['model' => $model]);
         }
